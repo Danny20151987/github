@@ -1,0 +1,28 @@
+@startuml
+== 构造函数 ==
+ClassPathXmlApplicationContext -> AbstractXmlApplicationContext:super(parent)
+AbstractXmlApplicationContext -> AbstractRefreshableConfigApplicationContext:super(parent)
+AbstractRefreshableConfigApplicationContext -> AbstractRefreshableApplicationContext:super(parent)
+AbstractRefreshableApplicationContext -> AbstractApplicationContext:super(parent)
+AbstractApplicationContext -> AbstractApplicationContext:this.resourcePatternResolver=\ngetResourcePatternResolver()
+AbstractApplicationContext -> PathMatchingResourcePatternResolver:new PathMatchingResourcePatternResolver(this)
+PathMatchingResourcePatternResolver --> AbstractApplicationContext:super(parent)
+AbstractApplicationContext ->AbstractApplicationContext:setParent:super(parent)
+AbstractApplicationContext --> AbstractRefreshableApplicationContext:super(parent)
+AbstractRefreshableApplicationContext --> AbstractRefreshableConfigApplicationContext:super(parent)
+AbstractRefreshableConfigApplicationContext --> AbstractXmlApplicationContext:super(parent)
+AbstractXmlApplicationContext --> ClassPathXmlApplicationContext:super(parent)
+
+== 设置配置文件路径 ==
+ClassPathXmlApplicationContext -> AbstractRefreshableConfigApplicationContext:setConfigLocations(configLocations)
+AbstractRefreshableConfigApplicationContext->AbstractRefreshableConfigApplicationContext:resolvePath(String path)
+AbstractRefreshableConfigApplicationContext->AbstractApplicationContext:getEnvironment()
+AbstractApplicationContext->AbstractApplicationContext:createEnvironment()
+AbstractApplicationContext->StandardEnvironment:new StandardEnvironment()
+StandardEnvironment-->AbstractApplicationContext
+AbstractApplicationContext-->AbstractRefreshableConfigApplicationContext
+AbstractRefreshableConfigApplicationContext->AbstractEnvironment:resolveRequiredPlaceholders(path)
+AbstractEnvironment-->AbstractRefreshableConfigApplicationContext
+AbstractRefreshableConfigApplicationContext-->ClassPathXmlApplicationContext
+
+@enduml

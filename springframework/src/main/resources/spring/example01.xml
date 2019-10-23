@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!--<bean id="myBean" name="myBean2,myBean1" class="com.study.springframework.example01.MyBean">
+        <meta key="testStr" value="aaaaaaaa"/>
+    </bean>-->
+
+    <!--设置别名方式-->
+    <!--<bean id="myBean" name="myBean2,myBean1" class="com.study.springframework.example01.MyBean"/>-->
+
+    <!--<alias name="myBean" alias="myBean1"/>
+    <alias name="myBean" alias="myBean2"/>
+    <bean id="myBean" class="com.study.springframework.example01.MyBean"/>-->
+
+
+
+    <import resource="example01-01.xml"/>
+
+</beans>

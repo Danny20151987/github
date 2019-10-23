@@ -1,0 +1,63 @@
+@startuml
+
+class ClassPathXmlApplicationContext
+class AbstractXmlApplicationContext
+ClassPathXmlApplicationContext -up-|>AbstractXmlApplicationContext
+
+class AbstractRefreshableConfigApplicationContext
+AbstractXmlApplicationContext -up-|>AbstractRefreshableConfigApplicationContext
+
+class AbstractRefreshableApplicationContext
+AbstractRefreshableConfigApplicationContext -up-|>AbstractRefreshableApplicationContext
+
+interface BeanNameAware
+interface InitializingBean
+AbstractRefreshableConfigApplicationContext .up.|>BeanNameAware
+AbstractRefreshableConfigApplicationContext .up.|>InitializingBean
+
+interface Aware
+BeanNameAware -up-|>Aware
+
+class AbstractApplicationContext
+AbstractRefreshableApplicationContext -up-|>AbstractApplicationContext
+
+class DefaultResourceLoader
+AbstractApplicationContext -up-|>DefaultResourceLoader
+
+interface ConfigurableApplicationContext
+interface DisposableBean
+AbstractApplicationContext .up.|>ConfigurableApplicationContext
+AbstractApplicationContext .up.|>DisposableBean
+
+interface ResourceLoader
+DefaultResourceLoader .up.|>ResourceLoader
+
+interface ApplicationContext
+interface Lifecycle
+interface Closeable
+ConfigurableApplicationContext -up-|>ApplicationContext
+ConfigurableApplicationContext -up-|>Lifecycle
+ConfigurableApplicationContext -up-|>Closeable
+
+interface AutoCloseable
+Closeable -up-|>AutoCloseable
+
+interface EnvironmentCapable
+interface ListableBeanFactory
+interface HierarchicalBeanFactory
+interface MessageSource
+interface ApplicationEventPublisher
+interface ResourcePatternResolver
+ApplicationContext -up-|>EnvironmentCapable
+ApplicationContext -up-|>ListableBeanFactory
+ApplicationContext -up-|>HierarchicalBeanFactory
+ApplicationContext -up-|>MessageSource
+ApplicationContext -up-|>ApplicationEventPublisher
+ApplicationContext -up-|>ResourcePatternResolver
+
+interface BeanFactory
+ListableBeanFactory -up-|>BeanFactory
+HierarchicalBeanFactory -up-|>BeanFactory
+ResourcePatternResolver -down-|>ResourceLoader
+
+@enduml
