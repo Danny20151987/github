@@ -1,0 +1,40 @@
+@startuml
+
+interface ApplicationContext
+interface ConfigurableApplicationContext
+ConfigurableApplicationContext -up-|>ApplicationContext
+
+abstract class AbstractApplicationContext
+AbstractApplicationContext .up.|>ConfigurableApplicationContext
+
+class GenericApplicationContext
+GenericApplicationContext -up-|>AbstractApplicationContext
+
+class AnnotationConfigApplicationContext
+AnnotationConfigApplicationContext -up-|>GenericApplicationContext
+
+abstract class AbstractRefreshableApplicationContext
+AbstractRefreshableApplicationContext -up-|>AbstractApplicationContext
+
+abstract class AbstractRefreshableConfigApplicationContext
+AbstractRefreshableConfigApplicationContext -up-|>AbstractRefreshableApplicationContext
+
+abstract class AbstractXmlApplicationContext
+AbstractXmlApplicationContext  -up-|>AbstractRefreshableConfigApplicationContext
+
+class ClassPathXmlApplicationContext
+ClassPathXmlApplicationContext -up-|>AbstractXmlApplicationContext
+
+class FileSystemXmlApplicationContext
+FileSystemXmlApplicationContext -up-|>AbstractXmlApplicationContext
+
+class GenericGroovyApplicationContext
+GenericGroovyApplicationContext -up-|>GenericApplicationContext
+
+class GenericXmlApplicationContext
+GenericXmlApplicationContext -up-|>GenericApplicationContext
+
+class StaticApplicationContext
+StaticApplicationContext -up-|>GenericApplicationContext
+
+@enduml

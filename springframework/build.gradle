@@ -9,18 +9,30 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 repositories {
-    maven {
-        url 'http://maven.aliyun.com/nexus/content/groups/public/'
-    }
+//    maven {
+//        url 'http://maven.aliyun.com/nexus/content/groups/public/'
+//    }
     mavenCentral()
 }
 
 dependencies {
     compile ('org.springframework:spring-core:4.3.25.RELEASE',
             'org.springframework:spring-beans:4.3.25.RELEASE',
+            'org.aspectj:aspectjweaver:1.8.9',
             'org.springframework:spring-aop:4.3.25.RELEASE',
             'org.springframework:spring-expression:4.3.25.RELEASE',
-            'org.springframework:spring-context:4.3.25.RELEASE'
+            'org.springframework:spring-context:4.3.25.RELEASE',
+            'org.springframework:spring-aspects:4.3.25.RELEASE',
+            'org.springframework:spring-web:4.3.25.RELEASE',
+            'org.springframework:spring-tx:4.3.25.RELEASE',
+            'org.springframework:spring-jdbc:4.3.25.RELEASE',
+            'org.springframework:spring-orm:4.3.25.RELEASE',
+            'org.bouncycastle:bcprov-jdk15on:1.50',
+            'org.hibernate:hibernate-core:3.6.10.Final'
+    )
+
+    testCompile ('junit:junit:4.12',
+            'org.springframework:spring-test:4.3.25.RELEASE'
     )
 }
 

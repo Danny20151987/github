@@ -1,0 +1,39 @@
+@startuml
+
+interface BeanFactory
+interface HierarchicalBeanFactory
+interface ListableBeanFactory
+interface AutowireCapableBeanFactory
+ListableBeanFactory -up-|>BeanFactory
+HierarchicalBeanFactory -up-|>BeanFactory
+AutowireCapableBeanFactory -up-|>BeanFactory
+
+class SimpleJndiBeanFactory
+SimpleJndiBeanFactory .up.|>BeanFactory
+
+interface ConfigurableBeanFactory
+ConfigurableBeanFactory -up-|>HierarchicalBeanFactory
+
+abstract class AbstractBeanFactory
+AbstractBeanFactory .up.|>ConfigurableBeanFactory
+
+abstract class AbstractAutowireCapableBeanFactory
+AbstractAutowireCapableBeanFactory  -up-|>AbstractBeanFactory
+
+class DefaultListableBeanFactory
+DefaultListableBeanFactory -up-|>AbstractAutowireCapableBeanFactory
+
+class XmlBeanFactory
+XmlBeanFactory -up-|>DefaultListableBeanFactory
+
+interface ConfigurableListableBeanFactory
+ConfigurableListableBeanFactory -up-|>ConfigurableBeanFactory
+ConfigurableListableBeanFactory -up-|>ListableBeanFactory
+ConfigurableListableBeanFactory -up-|>AutowireCapableBeanFactory
+DefaultListableBeanFactory .up.|>ConfigurableListableBeanFactory
+
+
+class StaticListableBeanFactory
+StaticListableBeanFactory .up.|>ListableBeanFactory
+
+@enduml

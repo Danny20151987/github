@@ -60,4 +60,7 @@ ListableBeanFactory -up-|>BeanFactory
 HierarchicalBeanFactory -up-|>BeanFactory
 ResourcePatternResolver -down-|>ResourceLoader
 
+class FileSystemXmlApplicationContext
+FileSystemXmlApplicationContext -up-|>AbstractXmlApplicationContext
+
 @enduml

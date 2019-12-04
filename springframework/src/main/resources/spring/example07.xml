@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+    <bean class = "org.springframework.beans.factory.config.CustomEditorConfigurer">
+        <property name="customEditors">
+            <map>
+                <entry key="java.util.Date">
+                    <bean class="com.study.springframework.example07.DatePropertyEditor">
+                        <property name="format" value="yyyyMMdd"/>
+                    </bean>
+                </entry>
+            </map>
+        </property>
+        <property name="propertyEditorRegistrars">
+            <list>
+                <bean class="com.study.springframework.example07.DatePropertyEditorRegister"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="userManger" class="com.study.springframework.example07.UserManger" >
+        <property name="dateValue" value="20190821"/>
+    </bean>
+
+</beans>
