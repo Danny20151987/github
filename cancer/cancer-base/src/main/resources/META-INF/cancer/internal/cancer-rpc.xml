@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://dubbo.apache.org/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://dubbo.apache.org/schema/dubbo http://dubbo.apache.org/schema/dubbo/dubbo.xsd"
+       default-autowire="byType">
+
+    <dubbo:application name="${app.name}" />
+
+    <dubbo:registry id="defaultRegistry" client="curator"
+                    group="${rpc.registry.group}" protocol="${rpc.registry.protocol}"
+                    address="${rpc.registry.address}" default="true" />
+
+    <dubbo:protocol id="dubbo" name="dubbo" port="${rpc.protocol.dubbo.port}" default="true" />
+
+    <dubbo:provider timeout="10000" retries="0" />
+
+</beans>

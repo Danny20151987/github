@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+	<!--定义日志文件的存储地址 勿在 LogBack 的配置中使用相对路径 -->
+	<property name="SYS_NO" value="cancer" />
+	<property name="APP_NAME" value="cancer-core" />
+	<property name="LOG_HOME" value="/Users/macbookpro/Desktop/logs/cancer/" />
+
+
+	<!--<define  name="process" class="ch.qos.logback.classic.LogbackProcess" />-->
+
+	<!-- 通讯类日志格式：日志级别|时间戳|全局业务流水号|进程号（线程号）|程序文件名（类名）|行号|日志内容 -->
+	<property name="COMMUNICATION_MSG" value="%level | %d{yyyy-MM-dd HH:mm:ss.SSS} | %X{TraceId} | %thread | %logger{36} | %L | %msg%n" />
+
+	<!-- 交易类日志格式：日志级别|时间戳|全局业务流水号|进程号（线程号）|程序文件名（类名）|行号|日志内容 -->
+	<property name="LOGGER_MSG" value="%level | %d{yyyy-MM-dd HH:mm:ss.SSS} | %X{TraceId} | %thread | %logger{36} | %L | %msg%n" />
+
+	<!-- 监控类日志格式：记录时间戳|请求响应类型|业务系统代码|机器编号|程序名（类名）|机构码*|*操作员|全局业务流水号|系统流水号|响应码|响应信息|跟踪日志文件名|*客户号|*账号|-->
+	<property name="MA_MSG" value="%d{yyyy-MM-dd HH:mm:ss.SSS} | %X{reqOrRsp} | ${SYS_NO} | ${HOSTNAME} | %logger{36} | %X{orgNo} | %X{txnOpr} | %X{TraceId} | %X{ExternalTranSeqNo} | %X{retCd} | %X{retMsg} | | %X{USERID} | %X{ACCTNO} |%n " />
+
+	<!-- 跟踪日志文件格式 -->
+	<property name="TRACE_MSG" value="&lt;_TRANS&gt;traceid=%X{TraceId},rpcId=%X{RpcId},ExtendSeqNo=%X{ExternalTranSeqNo},LogTime=%d{yyyy-MM-dd HH:mm:ss.SSS},%msg&lt;/_TRANS&gt;%n" />
+
+	<!-- 日志文件字符集 -->
+	<property name="FILE_CHARSET" value="utf-8" />
+	<!-- 单个日志文件最多30MB -->
+	<property name="FILE_MAX_SIZE" value="30MB" />
+	<!-- 保留30天历史日志文件 -->
+	<property name="FILE_MAX_HISTORY" value="30" />
+	<!-- FILE_MAX_HISTORY的基础上，指定所有归档日志文件的上限大小 -->
+	<property name="TOTAL_MAX_SIZE" value="20GB" />
+
+	<!-- 控制台日志输出 -->
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<pattern>${LOGGER_MSG}</pattern>
+		</layout>
+	</appender>
+
+
+	<!-- 通信类日志文件 -->
+	<appender name="COMMUNICATION_ROLLING_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOG_HOME}/${APP_NAME}.log</file>
+		<!-- 按照固定窗口模式生成日志文件，当文件大于50MB时，生成新的日志文件。窗口大小是1到3，当保存了10个日志文件后，将覆盖最早的日志。 -->
+		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+			<FileNamePattern>${LOG_HOME}/%d{yyyyMMdd}/${APP_NAME}_%i.log</FileNamePattern>
+			<maxFileSize>${FILE_MAX_SIZE}</maxFileSize>
+			<maxHistory>${FILE_MAX_HISTORY}</maxHistory>
+			<totalSizeCap>${TOTAL_MAX_SIZE}</totalSizeCap>
+		</rollingPolicy>
+		<Encoding>${FILE_CHARSET}</Encoding>
+		<!--<layout class="ch.qos.logback.classic.PatternEncryptionLayout">
+			<pattern>${COMMUNICATION_MSG}</pattern>
+		</layout>-->
+	</appender>
+	<appender name="COMMUNICATION_FILE" class="ch.qos.logback.classic.AsyncAppender">
+		<!-- 不丢失日志，默认的，如果队列的80%已满，则会丢丢弃TRACE、DEBUG、INFO级别的日志 -->
+		<discardingThreshold>0</discardingThreshold>
+		<!-- 更改默认的队列的深度，该值会影响性能，默认值为256 -->
+		<queueSize>512</queueSize>
+		<appender-ref ref="COMMUNICATION_ROLLING_FILE" />
+	</appender>
+
+	<!-- 交易类日志 -->
+	<!--<appender name="ROLLING_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">-->
+		<!--<file>${LOG_HOME}/${APP_NAME}.log</file>-->
+		<!--&lt;!&ndash; 按照固定窗口模式生成日志文件，当文件大于50MB时，生成新的日志文件。窗口大小是1到3，当保存了10个日志文件后，将覆盖最早的日志。 &ndash;&gt;-->
+		<!--<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">-->
+			<!--<FileNamePattern>${LOG_HOME}/%d{yyyyMMdd}/${APP_NAME}_%i.log</FileNamePattern>-->
+			<!--<maxFileSize>${FILE_MAX_SIZE}</maxFileSize>-->
+			<!--<maxHistory>${FILE_MAX_HISTORY}</maxHistory>-->
+			<!--<totalSizeCap>${TOTAL_MAX_SIZE}</totalSizeCap>-->
+		<!--</rollingPolicy>-->
+		<!--<Encoding>${FILE_CHARSET}</Encoding>-->
+		<!--<layout class="ch.qos.logback.classic.PatternEncryptionLayout">-->
+			<!--<pattern>${LOGGER_MSG}</pattern>-->
+		<!--</layout>-->
+	<!--</appender>-->
+	<!--<appender name="FILE" class="ch.qos.logback.classic.AsyncAppender">-->
+		<!--&lt;!&ndash; 不丢失日志，默认的，如果队列的80%已满，则会丢丢弃TRACE、DEBUG、INFO级别的日志 &ndash;&gt;-->
+		<!--<discardingThreshold>0</discardingThreshold>-->
+		<!--&lt;!&ndash; 更改默认的队列的深度，该值会影响性能，默认值为256 &ndash;&gt;-->
+		<!--<queueSize>512</queueSize>-->
+		<!--<appender-ref ref="ROLLING_FILE" />-->
+	<!--</appender>-->
+
+	<!-- 监控类日志 -->
+	<!--<appender name="MA_ROLLING_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">-->
+		<!--<file>${LOG_HOME}/ma_${SYS_NO}.log</file>-->
+		<!--&lt;!&ndash; 按照固定窗口模式生成日志文件，当文件大于50MB时，生成新的日志文件。窗口大小是1到3，当保存了10个日志文件后，将覆盖最早的日志。 &ndash;&gt;-->
+		<!--<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">-->
+			<!--<FileNamePattern>${LOG_HOME}/%d{yyyyMMdd}/ma_${SYS_NO}.log.%i</FileNamePattern>-->
+			<!--<maxFileSize>${FILE_MAX_SIZE}</maxFileSize>-->
+		<!--</rollingPolicy>-->
+		<!--<Encoding>${FILE_CHARSET}</Encoding>-->
+		<!--<layout class="ch.qos.logback.classic.PatternEncryptionLayout">-->
+			<!--<pattern>${MA_MSG}</pattern>-->
+		<!--</layout>-->
+	<!--</appender>-->
+	<!--<appender name="MA_FILE" class="ch.qos.logback.classic.AsyncAppender">-->
+		<!--&lt;!&ndash; 不丢失日志，默认的，如果队列的80%已满，则会丢丢弃TRACE、DEBUG、INFO级别的日志 &ndash;&gt;-->
+		<!--<discardingThreshold>0</discardingThreshold>-->
+		<!--&lt;!&ndash; 更改默认的队列的深度，该值会影响性能，默认值为256 &ndash;&gt;-->
+		<!--<queueSize>512</queueSize>-->
+		<!--<appender-ref ref="MA_ROLLING_FILE" />-->
+	<!--</appender>-->
+
+	<!-- 按照每天生成trace日志文件 -->
+	<!--<appender name="TRACELOG_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">-->
+		<!--<file>${LOG_HOME}/${APP_NAME}_trace.log</file>-->
+		<!--<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">-->
+			<!--&lt;!&ndash; 日志文件输出的文件名 &ndash;&gt;-->
+			<!--<FileNamePattern>${LOG_HOME}/%d{yyyyMMdd}/${APP_NAME}_trace_%i.log</FileNamePattern>-->
+			<!--&lt;!&ndash; 日志文件保留天数 &ndash;&gt;-->
+			<!--<maxFileSize>${FILE_MAX_SIZE}</maxFileSize>-->
+			<!--<maxHistory>${FILE_MAX_HISTORY}</maxHistory>-->
+			<!--<totalSizeCap>${TOTAL_MAX_SIZE}</totalSizeCap>-->
+		<!--</rollingPolicy>-->
+		<!--<Encoding>${FILE_CHARSET}</Encoding>-->
+		<!--<layout class="ch.qos.logback.classic.PatternEncryptionLayout">-->
+			<!--<pattern>${TRACE_MSG}</pattern>-->
+		<!--</layout>-->
+	<!--</appender>-->
+	<!--<appender name="TRACELOG" class="ch.qos.logback.classic.AsyncAppender">-->
+		<!--&lt;!&ndash; 不丢失日志，默认的，如果队列的80%已满，则会丢丢弃TRACE、DEBUG、INFO级别的日志 &ndash;&gt;-->
+		<!--<discardingThreshold>0</discardingThreshold>-->
+		<!--&lt;!&ndash; 更改默认的队列的深度，该值会影响性能，默认值为256 &ndash;&gt;-->
+		<!--<queueSize>512</queueSize>-->
+		<!--<appender-ref ref="TRACELOG_FILE" />-->
+	<!--</appender>-->
+
+
+	<!-- 按照每天生成异常日志文件 -->
+	<appender name="FILE_ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<level>ERROR</level>
+			<OnMismatch>DENY</OnMismatch>
+			<OnMatch>ACCEPT</OnMatch>
+		</filter>
+		<file>${LOG_HOME}/${APP_NAME}_err.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+			<!-- 日志文件输出的文件名 -->
+			<FileNamePattern>${LOG_HOME}/%d{yyyyMMdd}/${APP_NAME}_err_%i.log</FileNamePattern>
+			<!-- 日志文件保留天数 -->
+			<maxFileSize>${FILE_MAX_SIZE}</maxFileSize>
+			<maxHistory>${FILE_MAX_HISTORY}</maxHistory>
+			<totalSizeCap>${TOTAL_MAX_SIZE}</totalSizeCap>
+		</rollingPolicy>
+		<Encoding>${FILE_CHARSET}</Encoding>
+		<!--<layout class="ch.qos.logback.classic.PatternEncryptionLayout">
+			<pattern>${LOGGER_MSG}</pattern>
+		</layout>-->
+	</appender>
+
+	<logger name="org.springframework" level="ERROR" />
+	<logger name="org.apache" level="ERROR" />
+	<logger name="org.eclipse.jetty" level="ERROR" />
+	<logger name="org.mybatis" level="ERROR" />
+	<logger name="org.mortbay" level="ERROR" />
+	<logger name="org.quartz.core" level="ERROR" />
+	<logger name="com.dc.esc.client.factory.com.constellation.cancer.impl.ServiceRouterFactory" level="ERROR" />
+	<logger name="com.dap.spring.utils.ConfigurationUtil" level="ERROR" />
+
+	<!--
+    <logger name="com.idbp" additivity="false" level="DEBUG">
+    	<appender-ref ref="FILE" />
+    </logger>
+    -->
+	<!--
+	<logger name="maMsgLog" level="INFO">
+		<appender-ref ref="MA_FILE" />
+	</logger>
+	-->
+	<!--
+	<logger name="com.dc" level="DEBUG">
+		<appender-ref ref="LOG_HOME" />
+	</logger>
+	-->
+	<!--
+	<logger name="tracelog" level="trace" additivity="false">
+		<appender-ref ref="TRACELOG" />
+	</logger>
+	-->
+
+	<logger name="trans_error" level="ERROR" additivity="false">
+		<appender-ref ref="FILE_ERROR" />
+	</logger>
+
+	<root level="Debug">
+		<appender-ref ref="STDOUT" />
+		<appender-ref ref="COMMUNICATION_FILE" />
+	</root>
+</configuration>
