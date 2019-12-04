@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<errorCodes sysIndicate = "" >
-    <errorCode code="PX1111" message="日期错误" outCode="OT444" outMessage="" />
-</errorCodes>

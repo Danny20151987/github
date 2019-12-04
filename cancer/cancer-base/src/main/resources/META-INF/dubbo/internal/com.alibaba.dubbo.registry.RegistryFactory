@@ -1,2 +1,0 @@
-docker2zk=com.constellation.cancer.registry.docker.Docker2ZkRegistryFactory
-cancer=com.constellation.cancer.registry.cancer.CancerRegistryFactory
